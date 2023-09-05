@@ -18,8 +18,10 @@ class FakeConverter:
 
 @pytest.fixture
 def rpn(monkeypatch: pytest.MonkeyPatch) -> RPNCalculator:
-    rpn = RPNCalculator(Config())
-    monkeypatch.setattr(rpn, "converter", FakeConverter())
+
+    rpn = RPNCalculator(Config(), 
+                        converter=FakeConverter())
+    #monkeypatch.setattr(rpn, "converter", FakeConverter())
     return rpn
 
 def test_convert(rpn: RPNCalculator):

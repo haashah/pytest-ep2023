@@ -5,8 +5,8 @@ from rpncalc.convert import Converter
 
 class RPNCalculator:
 
-    def __init__(self, config):
-        self.converter = Converter()
+    def __init__(self, config, converter):
+        self.converter = converter
         self.config = config
         self.stack = []
 
@@ -70,5 +70,8 @@ class RPNCalculator:
 
 if __name__ == "__main__":
     config = Config()
-    rpn = RPNCalculator(config)
+    converter = Converter()
+    rpn = RPNCalculator(config=config, 
+                        converter=converter,
+                        )
     rpn.run()

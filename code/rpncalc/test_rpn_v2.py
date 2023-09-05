@@ -5,6 +5,12 @@ from rpncalc.utils import Config
 
 # rpncalc/test_rpn_v2.py
 
+@pytest.fixture
+def rpn() -> RPNCalculator:
+    """A RPN Calculator with a default config"""
+    return RPNCalculator(Config())
+
+
 def test_complex_example():
     rpn = RPNCalculator(Config())
 
@@ -44,14 +50,20 @@ def test_number_input(rpn, n):
 
 
 @pytest.mark.parametrize("op", ["**", "+-"])
-def test_unknown_operator(rpn, op):
+def test_unknown_operator(capsys, rpn, op):
     rpn.stack = [1, 2]
     rpn.evaluate(op)  # FIXME how to test that this prints an error?
+    out, err = capsys.readouterr()
+    assert out.strip() == f"Invalid input: {op}"
 
-def test_division_by_zero(rpn):
+def test_division_by_zero(capsys, rpn):
     rpn.stack = [1, 0]
     rpn.evaluate("/")  # FIXME how to test that this prints an error?
+    out, err = capsys.readouterr()
+    assert out.strip() == "Division by zero"
 
-def test_not_enough_operands(rpn):
+def test_not_enough_operands(capsys, rpn):
     rpn.stack = [1]
     rpn.evaluate("+")  # FIXME how to test that this prints an error?
+    out, err = capsys.readouterr()
+    assert out.strip() == "Not enough operands"
